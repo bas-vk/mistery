@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/resources">
+        <file>qml/MisteryWindow.qml</file>
+        <file>qml/TopMenuItem.qml</file>
+        <file>qml/constants.js</file>
+        <file>qml/fontawesome-webfont.ttf</file>
+        <file>qml/fontawesome.js</file>
+        <file>qml/BrowserComponent.qml</file>
+        <file>dapps/test.html</file>
+        <file>dapps/qtwebchannel.js</file>
+        <file>dapps/misteryProvider.js</file>
+        <file>dapps/web3.js</file>
+    </qresource>
+</RCC>

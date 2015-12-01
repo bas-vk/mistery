@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>test title</title>
+<script type="text/javascript" src="qrc:/resources/dapps/qtwebchannel.js"></script>
+<script type="text/javascript" src="qrc:/resources/dapps/misteryProvider.js"></script>
+<script type="text/javascript" src="qrc:/resources/dapps/web3.js"></script>
+<script>
+    function getAccounts() {
+        web3.eth.getAccounts(function(err, accounts) {
+            if (err == null) {
+                document.getElementById("accounts").innerText = JSON.stringify(accounts);
+            } else {
+                document.getElementById("accounts").innerText = err;
+            }
+        });
+    }
+</script>
+<body>
+<button onClick='getAccounts()'>get accounts</button>
+<br />
+Accounts: <span id="accounts"></span>
+</body>
+</html>

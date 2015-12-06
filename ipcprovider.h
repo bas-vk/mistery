@@ -22,8 +22,9 @@ public:
     bool connected() const;
 
 signals:
-    // is fired each time the node has send a response.
-    void message(const QString& message);
+    // is fired each time the provider receives a chunck of data. It's up to the receiver
+    // to dechunck the data.
+    void message(const QString& chunck);
 
     // fired when the connection to the node is established, lost or restored.
     void isConnectedChanged();
@@ -35,6 +36,9 @@ private slots:
     void readResponse();
 
 private:
+    // try to (re)connect to the Ethereum node
+    void connectToNode();
+
     bool _isConnected; // keeps track if the connection to the node is open
     QLocalSocket* _socket;
 };

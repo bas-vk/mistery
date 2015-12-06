@@ -5,8 +5,17 @@
 #include <QStandardPaths>
 #include <QDir>
 
-IPCProvider::IPCProvider(QObject *parent) : QObject(parent), _isConnected(false), _socket(nullptr)
-{
+IPCProvider::IPCProvider(QObject *parent) : QObject(parent), _isConnected(false), _socket(nullptr) {
+    connectToNode();
+}
+
+IPCProvider::~IPCProvider() {
+    if (_socket) {
+        delete _socket;
+    }
+}
+
+void IPCProvider::connectToNode() {
     _socket = new QLocalSocket;
 
     connect(_socket, SIGNAL(connected()), this, SLOT(socketConnected()));
@@ -27,11 +36,6 @@ IPCProvider::IPCProvider(QObject *parent) : QObject(parent), _isConnected(false)
     qDebug() << "IPC endpoint: " << QStandardPaths::HomeLocation << " " << path;
 
     _socket->connectToServer(path);
-}
-IPCProvider::~IPCProvider() {
-    if (_socket) {
-        delete _socket;
-    }
 }
 
 void IPCProvider::socketConnected() {

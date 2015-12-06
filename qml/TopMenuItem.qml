@@ -1,6 +1,10 @@
-import QtQuick 2.0
+import QtQuick 2.5
+import QtQuick.Layouts 1.1
+
+import "colors.js" as Styling
 
 Item {
+    id: topMenuItem
     property alias text: itemText.text
 
     signal clicked
@@ -14,16 +18,32 @@ Item {
 
     function setActive(active) {
         itemText.color = active ? "#ffffff" : "#cccccc";
-
+        itemMarker.color = active ? Styling.topMenu.markerColor : Styling.topMenu.backgroundColor;
     }
 
-    Text {
-        id: itemText
-        color: "#cccccc"
-        anchors.horizontalCenter: parent.horizontalCenter
+    ColumnLayout {
         anchors.verticalCenter: parent.verticalCenter
-        font.capitalization: Font.AllUppercase
-        font.family: "FontAwesome"
+        anchors.bottom: parent.bottom
+        spacing: 0
+
+        Text {
+            id: itemText
+            height: topMenuItem.height
+            color: "#cccccc"
+            Layout.alignment: Qt.AlignCenter
+
+            font.capitalization: Font.AllUppercase
+            font.family: "FontAwesome"
+        }
+
+
+        Rectangle {
+            id: itemMarker
+            height: Styling.topMenu.markerHeight
+            width: topMenuItem.width
+            color: Styling.topMenu.backgroundColor
+            Layout.alignment: Qt.AlignCenter
+        }
     }
 
     MouseArea {

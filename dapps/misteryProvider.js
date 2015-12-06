@@ -17,9 +17,9 @@ var MisteryProvider = function() {
         _this.misteryProvider = channel.objects.misteryProvider;
 
         // Connect to a signal:
-        _this.misteryProvider.message.connect(function(data) {
+        _this.misteryProvider.message.connect(function(chuck) {
 
-            _this._parseResponse(data).forEach(function(result) {
+            _this._parseResponse(chuck).forEach(function(result) {
 
                 var id = null;
 
@@ -83,9 +83,6 @@ MisteryProvider.prototype.isConnected = function() {
 
 MisteryProvider.prototype.send = function(request) {
     throw new Error('You tried to send "' + request.method + '" synchronously. Synchronous requests are not supported by the IPC provider.');
-
-    //this.misteryProvider.send(JSON.stringify(request));
-    //this._addResponseCallback(request, callback);
 };
 
 MisteryProvider.prototype.sendAsync = function(request, callback) {
@@ -110,28 +107,28 @@ Will parse the response and make an array out of it.
 @method _parseResponse
 @param {String} data
 */
-MisteryProvider.prototype._parseResponse = function(data) {
+MisteryProvider.prototype._parseResponse = function(chuck) {
     var _this = this,
         returnValues = [];
 
     // DE-CHUNKER
-    var dechunkedData = data
+    var dechunkedData = chuck
         .replace(/\}\{/g, '}|--|{') // }{
         .replace(/\}\]\[\{/g, '}]|--|[{') // }][{
         .replace(/\}\[\{/g, '}|--|[{') // }[{
         .replace(/\}\]\{/g, '}]|--|{') // }]{
         .split('|--|');
 
-    dechunkedData.forEach(function(data) {
+    dechunkedData.forEach(function(chuck) {
 
         // prepend the last chunk
         if (_this.lastChunk)
-            data = _this.lastChunk + data;
+            data = _this.lastChunk + chuck;
 
         var result = null;
 
         try {
-            result = JSON.parse(data);
+            result = JSON.parse(chuck);
         } catch (e) {
 
             _this.lastChunk = data;
@@ -140,7 +137,7 @@ MisteryProvider.prototype._parseResponse = function(data) {
             clearTimeout(_this.lastChunkTimeout);
             _this.lastChunkTimeout = setTimeout(function() {
                 _this.timeout();
-                throw "InvalidResponse " + data;
+                throw "InvalidResponse " + chuck;
             }, 1000 * 15);
 
             return;

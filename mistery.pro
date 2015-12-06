@@ -4,7 +4,8 @@ QT += qml quick webengine widgets webenginewidgets webchannel
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    ipcprovider.cpp
+    ipcprovider.cpp \
+    accountmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -15,8 +16,10 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 DISTFILES += \
-    constants.js
+    constants.js \
+    dapps/account/index.html
 
 HEADERS += \
-    ipcprovider.h
+    ipcprovider.h \
+    accountmanager.h
 

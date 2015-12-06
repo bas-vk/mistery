@@ -32,16 +32,19 @@ Item {
             }
 
             if (loadRequest.status == WebEngineView.LoadSucceededStatus) {
-                runJavaScript("var scrpt = document.createElement('script'); scrpt.setAttribute('type','text/javascript'); scrpt.setAttribute('src','qrc:/resources/dapps/qtwebchannel.js'); document.head.appendChild(scrpt);")
-                runJavaScript("var scrpt = document.createElement('script'); scrpt.setAttribute('type','text/javascript'); scrpt.setAttribute('src','qrc:/resources/dapps/misteryProvider.js'); document.head.appendChild(scrpt);")
-                runJavaScript("var scrpt = document.createElement('script'); scrpt.setAttribute('type','text/javascript'); scrpt.setAttribute('src','qrc:/resources/dapps/web3.js'); document.head.appendChild(scrpt);")
-
-                runJavaScript("var web3 = new Web3(); web3.setProvider(new MisteryProvider());", function(err) {
-                 console.log("err: ", err)
-                }
-                    )
+                /*
+                runJavaScript("web3 = new Web3(); web3.setProvider(new MisteryProvider());", function(err) {
+                    if (err) {
+                        console.log("err: ", err)
+                    }
+                })
                 console.log("set mistery provider for browser: ", parent.url)
+                */
             }
+        }
+
+        onJavaScriptConsoleMessage: {
+            console.log(sourceID, ":", lineNumber, "(", level, ")", message);
         }
     }
 }

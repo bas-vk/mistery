@@ -1,9 +1,8 @@
-import QtQuick 2.1
+import QtQuick 2.5
 import QtQuick.Controls 1.4
-import QtQuick.Window 2.0
-import QtQuick.Layouts 1.1
+import QtQuick.Window 2.2
 
-import "constants.js" as Constants
+import "colors.js" as Styling
 import "fontawesome.js" as FontAwesome
 
 ApplicationWindow {
@@ -13,11 +12,17 @@ ApplicationWindow {
     height: Screen.height * 0.75
     width: Screen.width * 0.75
 
+    property var browserTabs: []
+    property var browsers: []
+
     Component.onCompleted: {
         setX(Screen.width / 2 - width / 2)
         setY(Screen.height / 2 - height / 2)
 
-        setActiveTab(testBrowser);
+        browserTabs = [walletBrowserMenuItem, chainBrowserMenuItem, accountDAppMenuItem]
+        browsers = [walletBrowser, chainBrowser, accountDAppBrowser]
+
+        setActiveTab(2)
     }
 
     FontLoader {
@@ -26,191 +31,152 @@ ApplicationWindow {
     }
 
     Rectangle {
-        id: topBar
-        color: Constants.TopBarColor
-        anchors.left: applicationWindow.left
-        anchors.right: applicationWindow.right
+        id: mainPanel
 
-        height: Constants.TopBarHeight
-        width: applicationWindow.width
+        anchors.fill: parent
+        color: "black"
 
-        Row { // The "Row" type lays out its child items in a horizontal line
-            anchors.left: parent.left
-            anchors.right: parent.right
+        property bool menu_shown: false
 
-            spacing: 20 // Places 20px of space between items
-
-            TopMenuItem {
-                id: menuMenuItem
-                text: FontAwesome.Icon.List
-                height: topBar.height
-                //onEntered: { setActiveTab(blockChainBrowser) }
-            }
-            TopMenuItem {
-                id: testBrowserMenuItem
-                text: 'test'
-                height: topBar.height
-                onEntered: { setActiveTab(testBrowser) }
-            }
-            TopMenuItem {
-                id: browserMenuItem
-                text: 'browse'
-                height: topBar.height
-                onEntered: { setActiveTab(browserBrowser) }
-            }
-            TopMenuItem {
-                id: dappStoreMenuItem
-                text: 'DApp store'
-                height: topBar.height
-                onEntered: { setActiveTab(dappStoreBrowser) }
-            }
-            TopMenuItem {
-                id: walletMenuItem
-                text: 'walleth'
-                height: topBar.height
-                onEntered: { setActiveTab(walletBrowser) }
-            }
-            TopMenuItem {
-                id: blockChainMenuItem
-                text: 'blockchain'
-                height: topBar.height
-                onEntered: { setActiveTab(blockChainBrowser) }
-            }
-            TopMenuItem {
-                id: rumourMenuItem
-                text: 'rumour'
-                height: topBar.height
-                onEntered: { setActiveTab(rumourBrowser) }
-            }
-        }
-    }
-
-    BrowserComponent {
-        id: testBrowser
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        visible: false
-        url: "qrc:/resources/dapps/test.html"
-    }
-
-    BrowserComponent {
-        id: browserBrowser
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        visible: false
-        url: "http://google.com/"
-    }
-
-    BrowserComponent {
-        id: dappStoreBrowser
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        visible: false
-        url: "http://dappstore.io/"
-    }
-
-    BrowserComponent {
-        id: walletBrowser
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        visible: false
-        url: "http://ethereum-dapp-wallet.meteor.com/"
-    }
-
-    BrowserComponent {
-        id: blockChainBrowser
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        visible: false
-        url: "http://etherchain.org"
-    }
-
-    BrowserComponent {
-        id: rumourBrowser
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        visible: false
-        url: "http://nos.nl"
-    }
-
-    function setActiveTab(browser) {
-        testBrowser.visible = false;
-        testBrowserMenuItem.setActive(false);
-
-        walletBrowser.visible = false;
-        walletMenuItem.setActive(false);
-
-        blockChainMenuItem.setActive(false);
-        blockChainBrowser.visible = false;
-
-        dappStoreMenuItem.setActive(false);
-        dappStoreBrowser.visible = false;
-
-        browserMenuItem.setActive(false);
-        browserBrowser.visible = false;
-
-        rumourMenuItem.setActive(false);
-        rumourBrowser.visible = false;
-
-        if (testBrowser == browser) {
-            testBrowserMenuItem.setActive(true);
-            testBrowser.visible = true;
-        }
-
-        if (walletBrowser == browser) {
-            walletMenuItem.setActive(true);
-            walletBrowser.visible = true;
-        }
-
-        if (blockChainBrowser == browser) {
-            blockChainMenuItem.setActive(true);
-            blockChainBrowser.visible = true;
-        }
-
-        if (dappStoreBrowser == browser) {
-            dappStoreMenuItem.setActive(true);
-            dappStoreBrowser.visible = true;
-        }
-
-        if (browserBrowser == browser) {
-            browserMenuItem.setActive(true);
-            browserBrowser.visible = true;
-        }
-
-        if (rumourBrowser == browser) {
-            rumourMenuItem.setActive(true);
-            rumourBrowser.visible = true;
-        }
-    }
-
-    statusBar: StatusBar {
-        RowLayout {
+        Rectangle {
+            id: sideMenu
             anchors.fill: parent
-            Label {
-                text: FontAwesome.Icon.Cube + " #12345"
+            color: Styling.sidebarMenu.backgroundColor
+            opacity: mainPanel.menu_shown ? 1 : 0
+            Behavior on opacity { NumberAnimation { duration: 300 } }
+
+            ListView {
+                anchors { fill: parent; margins: 22 }
+                model: 8
+                delegate: Item {
+                    height: Styling.sidebarMenu.itemHeight
+                    width: parent.width;
+                    Text {
+                        anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
+                        color: "white"
+                        font.pixelSize: 12
+                        text: "This is menu #" + index
+                    }
+
+                    Rectangle {
+                        height: 2;
+                        width: parent.width * 0.7;
+                        color: "gray";
+                        anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
+                    }
+                }
             }
-            Label {
-                text:  "Read Only"
+        }
+
+        Rectangle {
+            id: defaultView
+            anchors.fill: parent
+            color: "white"
+
+            transform: Translate {
+                id: game_translate_
+                x: 0
+                Behavior on x { NumberAnimation { duration: 250; easing.type: Easing.OutQuad } }
             }
+
+            Rectangle {
+                id: menu_bar_
+                anchors.top: parent.top
+                width: parent.width
+                height: Styling.topMenu.height
+                color: Styling.topMenu.backgroundColor
+
+                Row {
+                    anchors {
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                    }
+
+                    spacing: 20
+
+                    TopMenuItem {
+                        id: menuMenuItem
+                        text: FontAwesome.Icon.List
+                        height: Styling.topMenu.height
+                        visible: true
+
+                        onClicked: mainPanel.onMenu()
+                    }
+
+                    TopMenuItem {
+                        id: walletBrowserMenuItem
+                        text: 'wallet'
+                        height: Styling.topMenu.height
+                        onEntered: setActiveTab(0)
+                    }
+
+                    TopMenuItem {
+                        id: chainBrowserMenuItem
+                        text: 'chain'
+                        height: Styling.topMenu.height
+                        onEntered: setActiveTab(1)
+                    }
+
+                    TopMenuItem {
+                        id: accountDAppMenuItem
+                        text: 'accounts'
+                        height: Styling.topMenu.height
+                        onEntered: setActiveTab(2)
+                    }
+                }
+            }
+
+            BrowserComponent {
+                id: walletBrowser
+                visible: false
+                anchors {
+                    top: menu_bar_.bottom
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
+                    margins: 0
+                }
+                url: "http://ethereum-dapp-wallet.meteor.com/"
+            }
+
+            BrowserComponent {
+                id: chainBrowser
+                visible: false
+                anchors {
+                    top: menu_bar_.bottom
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
+                    margins: 0
+                }
+                url: "http://etherchain.org"
+            }
+
+            BrowserComponent {
+                id: accountDAppBrowser
+                visible: false
+                anchors {
+                    top: menu_bar_.bottom
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
+                    margins: 0
+                }
+                url: "qrc:/account-dapp/index.html"
+            }
+        }
+
+        /* this functions toggles the menu and starts the animation */
+        function onMenu() {
+            game_translate_.x = mainPanel.menu_shown ? 0 : 200
+            mainPanel.menu_shown = !mainPanel.menu_shown;
+        }
+    }
+
+    function setActiveTab(index) {
+        for (var i = 0; i < browsers.length; i++) {
+            browsers[i].visible = (i == index)
+            browserTabs[i].setActive(i == index)
         }
     }
 }
-

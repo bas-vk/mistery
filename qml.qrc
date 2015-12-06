@@ -1,14 +1,31 @@
 <RCC>
     <qresource prefix="/resources">
-        <file>qml/MisteryWindow.qml</file>
         <file>qml/TopMenuItem.qml</file>
-        <file>qml/constants.js</file>
         <file>qml/fontawesome-webfont.ttf</file>
         <file>qml/fontawesome.js</file>
         <file>qml/BrowserComponent.qml</file>
-        <file>dapps/test.html</file>
         <file>dapps/qtwebchannel.js</file>
         <file>dapps/misteryProvider.js</file>
         <file>dapps/web3.js</file>
+        <file>qml/IconListViewStyle.qml</file>
+        <file>qml/badges.js</file>
+        <file>qml/items.js</file>
+        <file>qml/IconListView.qml</file>
+        <file>qml/List.qml</file>
+        <file>qml/ListDividerStyle.qml</file>
+        <file>qml/bars.js</file>
+        <file>qml/buttons.js</file>
+        <file>qml/base.js</file>
+        <file>qml/colors.js</file>
+        <file>qml/MisteryWindow.qml</file>
+        <file>qml/shadow.png</file>
+    </qresource>
+    <qresource prefix="/account-dapp">
+        <file alias="index.html">dapps/account/index.html</file>
+    </qresource>
+    <qresource prefix="/dapp-style">
+        <file alias="jquery/jquery.min.js">dapps/style/jquery-1.11.3/jquery.min.js</file>
+        <file alias="bootstrap/css/bootstrap.min.css">dapps/style/bootstrap-3.3.6-dist/css/bootstrap.min.css</file>
+        <file alias="bootstrap/js/bootstrap.min.js">dapps/style/bootstrap-3.3.6-dist/js/bootstrap.min.js</file>
     </qresource>
 </RCC>

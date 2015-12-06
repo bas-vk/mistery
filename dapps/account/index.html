@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>test title</title>
+<script type="text/javascript" src="qrc:/resources/dapps/qtwebchannel.js"></script>
+<script type="text/javascript" src="qrc:/resources/dapps/misteryProvider.js"></script>
+<script type="text/javascript" src="qrc:/resources/dapps/web3.js"></script>
+
+<script type="text/javascript" src="qrc:/dapp-style/jquery/jquery.min.js"></script>
+<link rel="stylesheet" href="qrc:/dapp-style/bootstrap/css/bootstrap.min.css">
+<script type="text/javascript" src="qrc:/dapp-style/bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+    function getAccounts() {
+        web3.eth.getAccounts(function(err, accounts) {
+            var accountList = "<ol>";
+
+            accounts.forEach(function(acc) {
+                accountList += "<li>" + acc + "</li>";
+            });
+
+            accountList += "</ol>";
+            document.getElementById("accounts").innerHTML = accountList;
+        });
+    }
+
+    var web3 = new Web3();
+    web3.setProvider(new MisteryProvider());
+
+    $(document).ready(function(){
+        console.log("get accounts");
+        getAccounts();
+    });
+
+
+</script>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <button type="button" class="btn btn-default navbar-btn">Home</button>
+        <button type="button" class="btn btn-default navbar-btn">Transactions</button>
+        <button type="button" class="btn btn-default navbar-btn">Send</button>
+        <button type="button" class="btn btn-default navbar-btn">Import/Export</button>
+    </div>
+</nav>
+
+<div>
+    Account DApp
+    <button onClick='getAccounts()'>get accounts</button>
+    <br />
+    Accounts:<br />
+    <div id="accounts"></div>
+</div>
+</body>
+</html>
